@@ -27,7 +27,7 @@ git clone https://github.com/shauryasawai/Cohort
 Change into the directory of the cloned repository:
 
 ```bash
-cd Resume-Parser-Data-Entry
+cd Cohort
 ```
 
 ### Step 3: Create a Virtual Environment
