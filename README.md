@@ -19,7 +19,7 @@ Before starting, ensure you have the following installed:
 Clone the Django application repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/Marketscope-Dev/Resume-Parser-Data-Entry
+git clone https://github.com/shauryasawai/Cohort
 ```
 
 ### Step 2: Navigate to the Project Directory
