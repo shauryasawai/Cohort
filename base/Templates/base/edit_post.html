@@ -5,42 +5,184 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customize Your Social Media Post</title>
     <style>
+        /* General body styling */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            margin: 20px;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
         }
-        canvas {
-            border: 2px solid black;
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
             margin-bottom: 20px;
-            border-radius: 10px;
+        }
+
+        /* Canvas styling */
+        canvas {
+            border: 4px solid #2c3e50;
+            margin-bottom: 20px;
+            border-radius: 15px;
             cursor: grab;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
+
+        /* Textarea styling */
         textarea {
-            width: 60%;
-            padding: 10px;
+            width: 80%;
+            max-width: 600px;
+            padding: 12px;
             font-size: 16px;
+            border: 2px solid #2c3e50;
+            border-radius: 8px;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
+
+        textarea:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        /* Button, input, and select styling */
         button, input, select {
             margin: 10px;
-            padding: 10px;
+            padding: 12px 20px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
         }
+
+        button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="color"] {
+            padding: 5px;
+            height: 40px;
+            width: 60px;
+            border-radius: 8px;
+            border: 2px solid #2c3e50;
+        }
+
+        input[type="range"] {
+            width: 150px;
+        }
+
+        /* Controls container styling */
         #controls {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
+            margin: 20px 0;
         }
+
+        /* Green button styling */
         .btn-green {
             background-color: #28a745;
             color: white;
-            border: none;
         }
+
         .btn-green:hover {
             background-color: #218838;
+        }
+
+        /* Sticker and template container styling */
+        .element-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .element-container h3 {
+            width: 100%;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .element-container img {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .element-container img:hover {
+            border-color: #28a745;
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Form styling */
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        form label {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-top: 10px;
+            display: block;
+        }
+
+        form textarea {
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* Resize handle styling */
+        .resize-handle {
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border: 1px solid #fff;
+            position: absolute;
+            cursor: se-resize;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            #controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .element-container img {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
 </head>
@@ -48,32 +190,43 @@
 
     <h1>Edit Your Social Media Post</h1>
 
-    <!-- Canvas for AI-generated image -->
-    <canvas id="canvas" width="400" height="500"></canvas>
+    <!-- Canvas for drawing the post -->
+    <canvas id="canvas" width="800" height="1000"></canvas>
 
+    <!-- Controls for customizing the post -->
     <div id="controls">
-        <!-- Upload Logo -->
         <input type="file" id="uploadLogo" accept="image/*">
-
-        <!-- Background Color -->
         <input type="color" id="bgColor" value="#ffffff">
-
-        <!-- Add Text -->
         <input type="text" id="customText" placeholder="Enter text">
         <button class="btn-green" onclick="addText()">Add Text</button>
-
-        <!-- Text Color -->
         <label for="textColor">Text Color:</label>
         <input type="color" id="textColor" value="#000000">
-
-        <!-- Text Size -->
         <label for="textSize">Text Size:</label>
         <input type="range" id="textSize" min="10" max="100" value="20">
+        <button class="btn-green" onclick="removeSelected()">Remove Selected</button>
+        <button class="btn-green" onclick="undo()">Undo</button>
     </div>
 
-    <!-- Save Image -->
-    <button class="btn-green" onclick="saveImage()">Save Post</button>
+    <!-- Stickers -->
+    <div class="element-container">
+        <h3>Stickers</h3>
+        <img src="https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg" alt="Sticker 1" onclick="addSticker('https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg')">
+        <img src="https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg" alt="Sticker 2" onclick="addSticker('https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg')">
+    </div>
 
+    <!-- Color Filters -->
+    <div id="controls">
+        <label for="filter">Apply Filter:</label>
+        <select id="filter" onchange="applyFilter(this.value)">
+            <option value="none">None</option>
+            <option value="grayscale">Grayscale</option>
+            <option value="sepia">Sepia</option>
+            <option value="invert">Invert</option>
+            <option value="saturate">Saturate</option>
+        </select>
+    </div>
+
+    <!-- Form for finalizing the post -->
     <form method="POST" action="{% url 'finalize_post' %}">
         {% csrf_token %}
         
@@ -89,55 +242,54 @@
     </form>
 
     <script>
+        // Canvas and context setup
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
+
+        // Array to hold all elements on the canvas
+        let elements = [];
+        let selectedElement = null;
+        let offsetX, offsetY, dragging = false;
+        let resizing = false;
+
+        // History for undo functionality
+        let history = [];
+        const MAX_HISTORY_LENGTH = 20; // Limit history to 20 states
 
         // Load AI-generated image
         const imageUrl = "{{ image_url }}";
         const img = new Image();
         img.src = imageUrl;
-        img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        let elements = [];
-        let draggingElement = null;
-        let offsetX, offsetY;
-
-        // Change Background Color
-        document.getElementById("bgColor").addEventListener("input", function () {
-            ctx.fillStyle = this.value;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        });
-
-        // Upload Logo
-        document.getElementById("uploadLogo").addEventListener("change", function (event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const logoImg = new Image();
-                logoImg.src = e.target.result;
-                logoImg.onload = function () {
-                    elements.push({ type: "image", img: logoImg, x: 100, y: 100, width: 100, height: 100 });
-                    drawCanvas();
-                };
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // Add Custom Text
-        function addText() {
-            const text = document.getElementById("customText").value;
-            const color = document.getElementById("textColor").value;
-            const size = document.getElementById("textSize").value;
-            
-            elements.push({ type: "text", text, x: 50, y: 50, font: `bold ${size}px Arial`, color, size });
+        img.onload = () => {
+            elements.push({ type: "image", img: img, x: 0, y: 0, width: canvas.width, height: canvas.height });
+            saveState(); // Save initial state
             drawCanvas();
+        };
+
+        // Function to save the current state to history
+        function saveState() {
+            if (history.length >= MAX_HISTORY_LENGTH) {
+                history.shift(); // Remove the oldest state if history exceeds limit
+            }
+            history.push(JSON.stringify(elements)); // Save a deep copy of the elements array
         }
 
-        // Draw Elements on Canvas
+        // Function to undo the last change
+        function undo() {
+            if (history.length > 1) {
+                history.pop(); // Remove the current state
+                elements = JSON.parse(history[history.length - 1]); // Revert to the previous state
+                drawCanvas();
+            } else {
+                alert("No more states to undo.");
+            }
+        }
+
+        // Function to redraw the canvas
         function drawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = document.getElementById("bgColor").value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             elements.forEach(element => {
                 if (element.type === "image") {
@@ -148,27 +300,139 @@
                     ctx.fillText(element.text, element.x, element.y);
                 }
             });
+
+            // Draw resize handle if an image is selected
+            if (selectedElement && selectedElement.type === "image") {
+                ctx.strokeStyle = "#28a745";
+                ctx.strokeRect(selectedElement.x, selectedElement.y, selectedElement.width, selectedElement.height);
+                drawResizeHandle(selectedElement.x + selectedElement.width, selectedElement.y + selectedElement.height);
+            }
         }
 
-        // Handle Dragging
+        // Draw resize handle
+        function drawResizeHandle(x, y) {
+            ctx.fillStyle = "#28a745";
+            ctx.fillRect(x - 5, y - 5, 10, 10);
+        }
+
+        // Change Background Color
+        document.getElementById("bgColor").addEventListener("input", function () {
+            saveState();
+            drawCanvas();
+        });
+
+        // Add Text
+        function addText() {
+            const text = document.getElementById("customText").value;
+            const color = document.getElementById("textColor").value;
+            const size = document.getElementById("textSize").value;
+            
+            elements.push({ type: "text", text, x: 50, y: 50, font: `bold ${size}px Arial`, color, size });
+            saveState();
+            drawCanvas();
+        }
+
+        // Upload Logo
+        document.getElementById("uploadLogo").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const logoImg = new Image();
+                logoImg.src = e.target.result;
+                logoImg.onload = function () {
+                    elements.push({ type: "image", img: logoImg, x: 100, y: 100, width: 100, height: 100 });
+                    saveState();
+                    drawCanvas();
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Set Background Template
+        function setBackground(templateUrl) {
+            const templateImg = new Image();
+            templateImg.src = templateUrl;
+            templateImg.onload = function () {
+                // Remove existing background (if any)
+                elements = elements.filter(el => el.type !== "background");
+
+                // Add the new background
+                elements.unshift({
+                    type: "background",
+                    img: templateImg,
+                    x: 0,
+                    y: 0,
+                    width: canvas.width,
+                    height: canvas.height
+                });
+
+                // Redraw the canvas
+                drawCanvas();
+            };
+            templateImg.onerror = function () {
+                console.error("Failed to load background template:", templateUrl);
+            };
+        }
+
+        // Add Sticker
+        function addSticker(stickerUrl) {
+            const stickerImg = new Image();
+            stickerImg.src = stickerUrl;
+            stickerImg.onload = function () {
+                // Add the sticker to the canvas at a default position
+                elements.push({
+                    type: "image",
+                    img: stickerImg,
+                    x: 100, // Default X position
+                    y: 100, // Default Y position
+                    width: 100, // Default width
+                    height: 100 // Default height
+                });
+                drawCanvas();
+            };
+            stickerImg.onerror = function () {
+                console.error("Failed to load sticker:", stickerUrl);
+            };
+        }
+
+        // Apply Color Filter
+        function applyFilter(filter) {
+            ctx.filter = filter === "none" ? "none" : filter + "(100%)";
+            saveState();
+            drawCanvas();
+        }
+
+        // Handle Dragging and Resizing
         canvas.addEventListener("mousedown", function (e) {
             const rect = canvas.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
 
+            // Check if the user clicked on the resize handle
+            if (selectedElement && selectedElement.type === "image") {
+                const handleX = selectedElement.x + selectedElement.width;
+                const handleY = selectedElement.y + selectedElement.height;
+                if (mouseX >= handleX - 10 && mouseX <= handleX + 10 && mouseY >= handleY - 10 && mouseY <= handleY + 10) {
+                    resizing = true;
+                    return;
+                }
+            }
+
+            // Check if the user clicked on an element
             for (let i = elements.length - 1; i >= 0; i--) {
                 const element = elements[i];
 
-                if (element.type === "image") {
+                if (element.type === "image" || element.type === "sticker") {
                     if (
                         mouseX >= element.x &&
                         mouseX <= element.x + element.width &&
                         mouseY >= element.y &&
                         mouseY <= element.y + element.height
                     ) {
-                        draggingElement = element;
+                        selectedElement = element;
                         offsetX = mouseX - element.x;
                         offsetY = mouseY - element.y;
+                        dragging = true;
                         return;
                     }
                 } else if (element.type === "text") {
@@ -179,9 +443,10 @@
                         mouseY >= element.y - element.size &&
                         mouseY <= element.y
                     ) {
-                        draggingElement = element;
+                        selectedElement = element;
                         offsetX = mouseX - element.x;
                         offsetY = mouseY - element.y;
+                        dragging = true;
                         return;
                     }
                 }
@@ -189,31 +454,54 @@
         });
 
         canvas.addEventListener("mousemove", function (e) {
-            if (draggingElement) {
-                const rect = canvas.getBoundingClientRect();
-                draggingElement.x = e.clientX - rect.left - offsetX;
-                draggingElement.y = e.clientY - rect.top - offsetY;
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            if (dragging && selectedElement) {
+                selectedElement.x = mouseX - offsetX;
+                selectedElement.y = mouseY - offsetY;
+                drawCanvas();
+            } else if (resizing && selectedElement) {
+                selectedElement.width = mouseX - selectedElement.x;
+                selectedElement.height = mouseY - selectedElement.y;
                 drawCanvas();
             }
         });
 
         canvas.addEventListener("mouseup", function () {
-            draggingElement = null;
+            if (dragging || resizing) {
+                saveState(); // Save state after dragging or resizing
+            }
+            dragging = false;
+            resizing = false;
         });
+
+        // Remove selected element
+        function removeSelected() {
+            if (selectedElement) {
+                elements = elements.filter(el => el !== selectedElement);
+                selectedElement = null;
+                saveState();
+                drawCanvas();
+            }
+        }
 
         // Update Text Size
         document.getElementById("textSize").addEventListener("input", function () {
-            if (draggingElement && draggingElement.type === "text") {
-                draggingElement.size = this.value;
-                draggingElement.font = `bold ${this.value}px Arial`;
+            if (selectedElement && selectedElement.type === "text") {
+                selectedElement.size = this.value;
+                selectedElement.font = `bold ${this.value}px Arial`;
+                saveState();
                 drawCanvas();
             }
         });
 
         // Update Text Color
         document.getElementById("textColor").addEventListener("input", function () {
-            if (draggingElement && draggingElement.type === "text") {
-                draggingElement.color = this.value;
+            if (selectedElement && selectedElement.type === "text") {
+                selectedElement.color = this.value;
+                saveState();
                 drawCanvas();
             }
         });
