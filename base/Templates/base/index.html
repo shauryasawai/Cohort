@@ -100,6 +100,19 @@
             font-size: 14px;
         }
 
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 5px solid #ff4f70;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #444;
+            text-align: left;
+            display: none;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -138,14 +151,10 @@
 
     <div class="container">
         <h2>✨ Generate a Social Media Post ✨</h2>
-        
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
 
-        <form action="{% url 'generate_post' %}" method="post">
-            {% csrf_token %}
-            
+        <div id="error-message" class="error" style="display: none;"></div>
+
+        <form id="postForm">
             <label for="product_name">📌 Product Name:</label>
             <input type="text" id="product_name" name="product_name" placeholder="Enter product name" required>
         
@@ -157,7 +166,51 @@
         
             <button type="submit">🚀 Generate Post</button>
         </form>
+
+        <div id="generatedPost" class="result"></div>
     </div>
+
+    <script>
+        document.getElementById("postForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const productName = document.getElementById("product_name").value;
+            const description = document.getElementById("description").value;
+            const targetAudience = document.getElementById("target_audience").value;
+            const errorMessage = document.getElementById("error-message");
+            const generatedPost = document.getElementById("generatedPost");
+
+            errorMessage.style.display = "none";
+            generatedPost.style.display = "none";
+
+            fetch("/api/generate_post/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    product_name: productName,
+                    description: description,
+                    target_audience: targetAudience
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    errorMessage.innerText = data.error;
+                    errorMessage.style.display = "block";
+                } else {
+                    generatedPost.innerHTML = `<strong>Generated Post:</strong><br>${data.post}`;
+                    generatedPost.style.display = "block";
+                }
+            })
+            .catch(error => {
+                errorMessage.innerText = "Something went wrong. Please try again.";
+                errorMessage.style.display = "block";
+            });
+        });
+    </script>
 
 </body>
 </html>
