@@ -13,27 +13,26 @@ import openai
 OPENAI_API_KEY = "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"
 openai.api_key = OPENAI_API_KEY
 
-
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 def generate_caption(product_name: str, description: str, audience: str) -> str:
     """
-    Generates a catchy social media caption using OpenAI GPT-4 Turbo.
+    Generates a catchy social media caption for a small hotel using OpenAI GPT-4 Turbo.
     """
     prompt = f"""
-    Generate a catchy and engaging social media caption for a product.
+    Generate a catchy and engaging social media caption for a small hotel.
     
-    Product: {product_name}
+    Hotel Name: {product_name}
     Description: {description}
     Target Audience: {audience}
     
-    Keep the caption short, creative, and engaging.
+    Keep the caption short, creative, and engaging. Highlight unique features, special offers, or local attractions.
     """
     
     try:
         response = client.chat.completions.create(
             model="gpt-4-turbo",
-            messages=[{"role": "system", "content": "You are an expert in writing social media marketing content."},
+            messages=[{"role": "system", "content": "You are an expert in writing social media marketing content for hotels."},
                       {"role": "user", "content": prompt}]
         )
         
@@ -42,25 +41,25 @@ def generate_caption(product_name: str, description: str, audience: str) -> str:
     except Exception as e:
         print(f"🚨 Caption Generation API Request Failed: {e}")
     
-    return "🚀 Discover something amazing today!"  # Fallback caption
+    return "🌟 Discover your perfect getaway with us! 🌴"  # Fallback caption
 
 def generate_hashtags(description: str, audience: str) -> str:
     """
-    Generates relevant hashtags using OpenAI GPT-4 Turbo.
+    Generates relevant hashtags for a small hotel using OpenAI GPT-4 Turbo.
     """
     prompt = f"""
-    Generate five relevant and trending hashtags for a product.
+    Generate five relevant and trending hashtags for a small hotel.
     
     Description: {description}
     Target Audience: {audience}
     
-    Format: Return hashtags separated by spaces, e.g., "#Fitness #HealthyLife #Workout"
+    Format: Return hashtags separated by spaces, e.g., "#LuxuryStay #TravelGoals #HotelLife"
     """
     
     try:
         response = client.chat.completions.create(
             model="gpt-4-turbo",
-            messages=[{"role": "system", "content": "You are an expert in social media marketing and hashtag optimization."},
+            messages=[{"role": "system", "content": "You are an expert in social media marketing and hashtag optimization for hotels."},
                       {"role": "user", "content": prompt}]
         )
         
@@ -69,7 +68,8 @@ def generate_hashtags(description: str, audience: str) -> str:
     except Exception as e:
         print(f"🚨 Hashtag Generation API Request Failed: {e}")
     
-    return "#Trending #MustHave #ShopNow #Innovation #Discover"  # Fallback hashtags
+    return "#HotelLife #TravelGoals #Staycation #LuxuryStay #ExploreLocal"  # Fallback hashtags
+
 
 
 def get_pexels_image(prompt: str) -> str:

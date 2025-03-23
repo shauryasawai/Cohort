@@ -12,3 +12,14 @@ class SocialPost(models.Model):
     hashtags = models.TextField()
     generated_image = models.URLField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class ScheduledPost(models.Model):
+    image_url = models.URLField()
+    caption = models.TextField()
+    hashtags = models.TextField()
+    schedule_time = models.DateTimeField()
+    is_posted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Post scheduled for {self.schedule_time}"

@@ -32,6 +32,23 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+        .schedule-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            display: inline-block;
+            background-color: #f9f9f9;
+        }
+        .schedule-form input[type="datetime-local"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .schedule-form button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -57,6 +74,15 @@
         <button class="btn-blue" onclick="shareOnTwitter()">Twitter (X)</button>
         <button class="btn-blue" onclick="shareOnLinkedIn()">LinkedIn</button>
         <button class="btn-green" onclick="shareOnWhatsApp()">WhatsApp</button>
+    </div>
+
+    <div class="schedule-form">
+        <h3>Schedule Post</h3>
+        <form id="scheduleForm" onsubmit="schedulePost(event)">
+            <label for="scheduleTime">Select Date & Time:</label><br>
+            <input type="datetime-local" id="scheduleTime" name="scheduleTime" required><br><br>
+            <button type="submit" class="btn-green">Schedule Post</button>
+        </form>
     </div>
 
     <script>
@@ -87,6 +113,34 @@
             const url = encodeURIComponent(document.getElementById('finalImage').src);
             const text = encodeURIComponent("{{ caption }} {{ hashtags }}");
             window.open(`https://api.whatsapp.com/send?text=${text} ${url}`, "_blank");
+        }
+
+        function schedulePost(event) {
+            event.preventDefault();
+            const scheduleTime = document.getElementById('scheduleTime').value;
+            const postData = {
+                image_url: document.getElementById('finalImage').src,
+                caption: "{{ caption }}",
+                hashtags: "{{ hashtags }}",
+                schedule_time: scheduleTime
+            };
+
+            // Send the data to your backend for scheduling
+            fetch('/schedule-post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Post scheduled successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Failed to schedule post.');
+            });
         }
     </script>
 

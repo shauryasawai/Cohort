@@ -89,3 +89,32 @@ def final_post(request):
 
     return render(request, "base/final_post.html", final_data)
 
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .models import ScheduledPost
+from django.http import JsonResponse
+
+
+@csrf_exempt
+def schedule_post(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            image_url = data.get('image_url')
+            caption = data.get('caption')
+            hashtags = data.get('hashtags')
+            schedule_time = data.get('schedule_time')
+
+            # Save the scheduled post
+            post = ScheduledPost(
+                image_url=image_url,
+                caption=caption,
+                hashtags=hashtags,
+                schedule_time=schedule_time
+            )
+            post.save()
+
+            return JsonResponse({'success': True, 'message': 'Post scheduled successfully!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
