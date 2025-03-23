@@ -95,3 +95,61 @@ deactivate
 
 - Ensure you have the latest version of `pip` by running `pip install --upgrade pip`.
 - If you encounter any issues during the installation process, check the error messages for guidance and ensure all prerequisites are met.
+
+# Social Media Post Generator - API Guide
+
+
+
+
+## API Endpoints
+
+### 1. **Home Page (Frontend UI)**
+- **Endpoint:** `/`
+- **Method:** `GET`
+- **Description:** Renders the home page where users can input product details.
+- **Usage:** This is for the frontend UI, where users can enter details via a form.
+
+### 2. **Generate Social Media Post**
+- **Endpoint:** `/api/generate_post/`
+- **Method:** `POST`
+- **Description:** Accepts product details and generates a social media post.
+- **Request Body (JSON):**
+  ```json
+  {
+    "product_name": "Awesome Phone X",
+    "description": "A powerful smartphone with an amazing camera!",
+    "target_audience": "Tech Enthusiasts"
+  }
+  ```
+- **Response (JSON):**
+  ```json
+  {
+    "generated_post": "🚀 Introducing Awesome Phone X! A powerful smartphone with an amazing camera 📸. Perfect for tech enthusiasts! #AwesomePhoneX #Tech"
+  }
+  ```
+
+## Frontend Integration
+- **For UI Rendering:** Use `fetch('/api/generate_post/', { method: 'POST', body: JSON.stringify(data) })` in JavaScript to send data and retrieve the generated post.
+- **For Error Handling:** Ensure the API responses are properly validated before displaying messages.
+
+## Setup Instructions (For Development)
+1. **Install Dependencies:**
+   ```sh
+   pip install django django-cors-headers
+   ```
+2. **Run Migrations:**
+   ```sh
+   python manage.py migrate
+   ```
+3. **Start Server:**
+   ```sh
+   python manage.py runserver
+   ```
+
+## Notes for Frontend Developers
+- The backend uses Django, and CORS is enabled to allow API calls from different domains.
+- Ensure you include `Content-Type: application/json` in headers when making API requests.
+
+For any issues, contact me on Whatsapp! 🚀
+
+
