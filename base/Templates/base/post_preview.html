@@ -230,6 +230,9 @@
     <form method="POST" action="{% url 'finalize_post' %}">
         {% csrf_token %}
         
+        <input type="hidden" name="product_name" value="{{ product_name }}">
+        <input type="hidden" id="finalImage" name="image_url" value="{{ image_url }}">
+        
         <p><strong>Product Name:</strong> {{ product_name }}</p>
 
         <label for="edited_caption"><strong>Edit Caption:</strong></label><br>
@@ -238,13 +241,14 @@
         <label for="edited_hashtags"><strong>Edit Hashtags:</strong></label><br>
         <textarea name="edited_hashtags" rows="2">{{ hashtags }}</textarea><br><br>
 
-        <button class="btn-green" type="submit">Finalize Post</button>
+        <button class="btn-green" type="button" onclick="saveAndSubmit()">Finalize Post</button>
     </form>
 
     <script>
         // Canvas and context setup
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
+        const finalImageInput = document.getElementById("finalImage");
 
         // Array to hold all elements on the canvas
         let elements = [];
@@ -259,6 +263,7 @@
         // Load AI-generated image
         const imageUrl = "{{ image_url }}";
         const img = new Image();
+        img.crossOrigin = "Anonymous"; // Important for saving canvas with external images
         img.src = imageUrl;
         img.onload = () => {
             elements.push({ type: "image", img: img, x: 0, y: 0, width: canvas.width, height: canvas.height });
@@ -327,6 +332,11 @@
             const color = document.getElementById("textColor").value;
             const size = document.getElementById("textSize").value;
             
+            if (text.trim() === "") {
+                alert("Please enter some text first");
+                return;
+            }
+            
             elements.push({ type: "text", text, x: 50, y: 50, font: `bold ${size}px Arial`, color, size });
             saveState();
             drawCanvas();
@@ -335,6 +345,8 @@
         // Upload Logo
         document.getElementById("uploadLogo").addEventListener("change", function (event) {
             const file = event.target.files[0];
+            if (!file) return;
+            
             const reader = new FileReader();
             reader.onload = function (e) {
                 const logoImg = new Image();
@@ -348,46 +360,21 @@
             reader.readAsDataURL(file);
         });
 
-        // Set Background Template
-        function setBackground(templateUrl) {
-            const templateImg = new Image();
-            templateImg.src = templateUrl;
-            templateImg.onload = function () {
-                // Remove existing background (if any)
-                elements = elements.filter(el => el.type !== "background");
-
-                // Add the new background
-                elements.unshift({
-                    type: "background",
-                    img: templateImg,
-                    x: 0,
-                    y: 0,
-                    width: canvas.width,
-                    height: canvas.height
-                });
-
-                // Redraw the canvas
-                drawCanvas();
-            };
-            templateImg.onerror = function () {
-                console.error("Failed to load background template:", templateUrl);
-            };
-        }
-
         // Add Sticker
         function addSticker(stickerUrl) {
             const stickerImg = new Image();
+            stickerImg.crossOrigin = "Anonymous"; // Important for saving canvas with external images
             stickerImg.src = stickerUrl;
             stickerImg.onload = function () {
-                // Add the sticker to the canvas at a default position
                 elements.push({
                     type: "image",
                     img: stickerImg,
-                    x: 100, // Default X position
-                    y: 100, // Default Y position
-                    width: 100, // Default width
-                    height: 100 // Default height
+                    x: 100,
+                    y: 100,
+                    width: 100,
+                    height: 100
                 });
+                saveState();
                 drawCanvas();
             };
             stickerImg.onerror = function () {
@@ -422,7 +409,7 @@
             for (let i = elements.length - 1; i >= 0; i--) {
                 const element = elements[i];
 
-                if (element.type === "image" || element.type === "sticker") {
+                if (element.type === "image") {
                     if (
                         mouseX >= element.x &&
                         mouseX <= element.x + element.width &&
@@ -506,12 +493,14 @@
             }
         });
 
-        // Save Final Image
-        function saveImage() {
-            const link = document.createElement("a");
-            link.download = "final_post.png";
-            link.href = canvas.toDataURL();
-            link.click();
+        // Save the canvas as image and submit the form
+        function saveAndSubmit() {
+            // Convert canvas to data URL
+            const dataURL = canvas.toDataURL("image/png");
+            // Set the value of the hidden input
+            finalImageInput.value = dataURL;
+            // Submit the form
+            document.querySelector("form").submit();
         }
     </script>
 

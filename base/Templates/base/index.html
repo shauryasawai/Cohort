@@ -45,7 +45,7 @@
             text-align: left;
         }
 
-        input {
+        input, textarea {
             width: 100%;
             padding: 12px;
             margin-top: 8px;
@@ -57,13 +57,18 @@
             background: #f9f9f9;
         }
 
-        input:focus {
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus {
             border-color: #ff3366;
             box-shadow: 0px 0px 10px rgba(255, 99, 132, 0.3);
             background: #fff;
         }
 
-        input::placeholder {
+        input::placeholder, textarea::placeholder {
             color: #aaa;
         }
 
@@ -135,7 +140,7 @@
                 font-size: 24px;
             }
 
-            input {
+            input, textarea {
                 padding: 10px;
                 font-size: 14px;
             }
@@ -152,65 +157,26 @@
     <div class="container">
         <h2>✨ Generate a Social Media Post ✨</h2>
 
-        <div id="error-message" class="error" style="display: none;"></div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="error">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
-        <form id="postForm">
+        <form method="post" action="{% url 'generate_post' %}">
+            {% csrf_token %}
             <label for="product_name">📌 Product Name:</label>
             <input type="text" id="product_name" name="product_name" placeholder="Enter product name" required>
         
             <label for="description">📝 Product Description:</label>
-            <input type="text" id="description" name="description" placeholder="Enter a short description" required>
+            <textarea id="description" name="description" placeholder="Enter a short description" required></textarea>
         
             <label for="target_audience">🎯 Target Audience:</label>
             <input type="text" id="target_audience" name="target_audience" placeholder="E.g., students, professionals" required>
         
             <button type="submit">🚀 Generate Post</button>
         </form>
-
-        <div id="generatedPost" class="result"></div>
     </div>
-
-    <script>
-        document.getElementById("postForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            const productName = document.getElementById("product_name").value;
-            const description = document.getElementById("description").value;
-            const targetAudience = document.getElementById("target_audience").value;
-            const errorMessage = document.getElementById("error-message");
-            const generatedPost = document.getElementById("generatedPost");
-
-            errorMessage.style.display = "none";
-            generatedPost.style.display = "none";
-
-            fetch("/api/generate_post/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({
-                    product_name: productName,
-                    description: description,
-                    target_audience: targetAudience
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    errorMessage.innerText = data.error;
-                    errorMessage.style.display = "block";
-                } else {
-                    generatedPost.innerHTML = `<strong>Generated Post:</strong><br>${data.post}`;
-                    generatedPost.style.display = "block";
-                }
-            })
-            .catch(error => {
-                errorMessage.innerText = "Something went wrong. Please try again.";
-                errorMessage.style.display = "block";
-            });
-        });
-    </script>
 
 </body>
 </html>
