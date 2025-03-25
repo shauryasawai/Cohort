@@ -1,17 +1,17 @@
 from django.shortcuts import render
 import requests
-
-# 🎯 Pexels API Configuration
-#
-PEXELS_API_KEY = "VFL9S0rbYQB76BCzMex6cNBy8NL5EFOTvI93z8C8nxAiQGH4Q3tRgZO2"
-PEXELS_SEARCH_URL = "https://api.pexels.com/v1/search"
-
 import requests
 import openai
+import os
+from dotenv import load_dotenv
 
-# Set your OpenAI API key
-OPENAI_API_KEY = "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"
-openai.api_key = OPENAI_API_KEY
+# Load environment variables from .env file
+load_dotenv()
+
+# Retrieve API keys from environment variables
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+PEXELS_SEARCH_URL = "https://api.pexels.com/v1/search"
 
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
