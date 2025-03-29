@@ -193,6 +193,13 @@
     <!-- Canvas for drawing the post -->
     <canvas id="canvas" width="800" height="1000"></canvas>
 
+    <div class="image-container">
+        <h3>🖼️</h3>        
+        <label for="imagePrompt">🔍 Enter Image Prompt:</label>
+        <input type="text" id="imagePrompt" placeholder="Enter a theme, e.g., beach resort">
+        <button onclick="regenerateImage()">🔄 Generate New Image</button>
+    </div>
+
     <!-- Controls for customizing the post -->
     <div id="controls">
         <input type="file" id="uploadLogo" accept="image/*">
@@ -210,8 +217,22 @@
     <!-- Stickers -->
     <div class="element-container">
         <h3>Stickers</h3>
-        <img src="https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg" alt="Sticker 1" onclick="addSticker('https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg')">
-        <img src="https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg" alt="Sticker 2" onclick="addSticker('https://img.freepik.com/premium-photo/stickers-instagram-post-15_1202918-286.jpg')">
+        <img src="../../stickers/eid1.png" alt="Star Sticker" onclick="addSticker('../../stickers/eid1.png')">
+        <img src="../../stickers/eid2.png" alt="Heart Sticker" onclick="addSticker('../../stickers/eid2.png')">
+        <img src="../../stickers/eid3.png" alt="Fire Sticker" onclick="addSticker('../../stickers/eid3.png')">
+        <img src="../../stickers/eid4.png" alt="Like Sticker" onclick="addSticker('../../stickers/eid4.png')">
+        <img src="../../stickers/friday1.png" alt="Fire Sticker" onclick="addSticker('../../stickers/friday1.png')">
+        <img src="../../stickers/friday2.png" alt="Smile Sticker" onclick="addSticker('../../stickers/friday2.png')">
+        <img src="../../stickers/friday3.png" alt="Check Sticker" onclick="addSticker('../../stickers/friday3.png')">
+        <img src="../../stickers/holi1.png" alt="Star Sticker" onclick="addSticker('../../stickers/holi1.png')">
+        <img src="../../stickers/holi2.png" alt="Heart Sticker" onclick="addSticker('../../stickers/holi2.png')">
+        <img src="../../stickers/holi3.png" alt="Like Sticker" onclick="addSticker('../../stickers/holi3.png')">
+    </div>
+
+    <!-- Upload Custom Sticker -->
+    <div id="controls">
+        <input type="file" id="uploadSticker" accept="image/*">
+        <button class="btn-green" onclick="addCustomSticker()">Add Custom Sticker</button>
     </div>
 
     <!-- Color Filters -->
@@ -360,26 +381,69 @@
             reader.readAsDataURL(file);
         });
 
-        // Add Sticker
+        // Add Sticker from URL
         function addSticker(stickerUrl) {
             const stickerImg = new Image();
             stickerImg.crossOrigin = "Anonymous"; // Important for saving canvas with external images
             stickerImg.src = stickerUrl;
             stickerImg.onload = function () {
+                // Calculate aspect ratio to maintain proportions
+                const aspectRatio = stickerImg.width / stickerImg.height;
+                const defaultSize = 100;
+                
                 elements.push({
                     type: "image",
                     img: stickerImg,
-                    x: 100,
-                    y: 100,
-                    width: 100,
-                    height: 100
+                    x: canvas.width / 2 - defaultSize / 2, // Center the sticker
+                    y: canvas.height / 2 - defaultSize / 2,
+                    width: defaultSize,
+                    height: defaultSize / aspectRatio,
+                    originalWidth: defaultSize,
+                    originalHeight: defaultSize / aspectRatio
                 });
                 saveState();
                 drawCanvas();
             };
             stickerImg.onerror = function () {
                 console.error("Failed to load sticker:", stickerUrl);
+                alert("Failed to load sticker. Please try another one.");
             };
+        }
+
+        // Add Custom Sticker from upload
+        function addCustomSticker() {
+            const fileInput = document.getElementById("uploadSticker");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a sticker image first");
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const stickerImg = new Image();
+                stickerImg.src = e.target.result;
+                stickerImg.onload = function () {
+                    // Calculate aspect ratio to maintain proportions
+                    const aspectRatio = stickerImg.width / stickerImg.height;
+                    const defaultSize = 100;
+                    
+                    elements.push({
+                        type: "image",
+                        img: stickerImg,
+                        x: canvas.width / 2 - defaultSize / 2, // Center the sticker
+                        y: canvas.height / 2 - defaultSize / 2,
+                        width: defaultSize,
+                        height: defaultSize / aspectRatio,
+                        originalWidth: defaultSize,
+                        originalHeight: defaultSize / aspectRatio
+                    });
+                    saveState();
+                    drawCanvas();
+                    fileInput.value = ""; // Clear the file input
+                };
+            };
+            reader.readAsDataURL(file);
         }
 
         // Apply Color Filter
@@ -502,6 +566,41 @@
             // Submit the form
             document.querySelector("form").submit();
         }
+
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+
+        function regenerateImage() {
+            let prompt = document.getElementById("imagePrompt").value || "luxury hotel";
+        
+            fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let img = new Image();
+                    img.crossOrigin = "Anonymous"; // Prevents CORS issues
+                    img.src = data.image_url + `?t=${new Date().getTime()}`; // Force image reload
+        
+                    img.onload = function () {
+                        // Clear existing elements and add the new image
+                        elements = [{ type: "image", img: img, x: 0, y: 0, width: canvas.width, height: canvas.height }];
+        
+                        // Save state and redraw canvas
+                        saveState();
+                        drawCanvas();
+                    };
+        
+                    img.onerror = function () {
+                        console.error("Error loading image");
+                        alert("Failed to regenerate the image. Please try again.");
+                    };
+                })
+                .catch(error => {
+                    console.error("Error fetching image:", error);
+                    alert("Error generating image. Please check your connection and try again.");
+                });
+        }
+        
     </script>
 
 </body>

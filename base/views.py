@@ -3,10 +3,21 @@ from django.urls import reverse
 from .services import get_pexels_image, generate_hashtags, generate_caption
 from .models import ScheduledPost
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def home(request):
     """Renders the home page where users can input product details."""
     return render(request, "base/index.html")
+
+def generate_image(request):
+    """
+    Fetches an image based on a user-provided prompt.
+    """
+    prompt = request.GET.get("prompt", "luxury hotel")
+    image_url = get_pexels_image(prompt)
+    return JsonResponse({"image_url": image_url})
 
 def generate_post(request):
     """Handles post generation with template rendering"""
@@ -22,7 +33,7 @@ def generate_post(request):
 
             caption = generate_caption(product_name, description, target_audience)
             hashtags = generate_hashtags(description, target_audience)
-            image_query = f"{product_name} promotional post, {description}, best for {target_audience}"
+            image_query = f"promotional post, {description}"
             image_url = get_pexels_image(image_query)
 
             context = {

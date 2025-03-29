@@ -3,133 +3,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Final Post</title>
+    <title>Final Post Preview | {{ product_name }}</title>
     <meta property="og:image" content="{{ image_url }}">
     <meta property="og:title" content="{{ product_name }}">
     <meta property="og:description" content="{{ caption }}">
     <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            padding: 0;
+            margin: 0;
         }
-        img {
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        button {
-            margin: 10px;
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-        }
-        .btn-green { background-color: #28a745; color: white; }
-        .btn-blue { background-color: #007bff; color: white; }
-        .btn-red { background-color: #dc3545; color: white; }
-        .btn-grey { background-color: #6c757d; color: white; }
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .schedule-form {
-            margin-top: 20px;
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            display: inline-block;
-            background-color: #f9f9f9;
         }
-        .schedule-form input[type="datetime-local"] {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
         }
-        .schedule-form button {
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            text-align: center;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin: 20px 0 15px;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 20px 0 15px;
+            font-size: 1.4rem;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .post-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .post-image-container {
+            position: relative;
+            max-width: 100%;
+        }
+        
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .post-content {
+            width: 100%;
+            text-align: left;
+        }
+        
+        .content-section {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-gray {
+            background-color: var(--gray);
+            color: var(--white);
+        }
+        
+        .btn-light {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .social-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .schedule-form {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        input[type="datetime-local"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .hidden-input {
+            display: none;
+        }
+        
+        .hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-top: 10px;
         }
+        
+        .hashtag {
+            background-color: #e0f4ff;
+            color: #0066cc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .social-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
-
-    <h1>Your Finalized Post</h1>
-
-    <h2>{{ product_name }}</h2>
-
-    <p><strong>Caption:</strong></p>
-    <p>{{ caption }}</p>
-
-    <p><strong>Hashtags:</strong></p>
-    <p>{{ hashtags }}</p>
-
-    <img id="finalImage" src="{{ image_url }}" alt="Final Image" width="400"><br><br>
-
-    <button class="btn-grey" onclick="window.print()">Print or Save</button>
-    <button class="btn-green" onclick="downloadImage()">Download Image</button>
-
-    <h3>Upload to Social Media</h3>
-    <div class="social-buttons">
-        <button class="btn-blue" onclick="shareOnFacebook()">Facebook</button>
-        <button class="btn-blue" onclick="shareOnTwitter()">Twitter (X)</button>
-        <button class="btn-blue" onclick="shareOnLinkedIn()">LinkedIn</button>
-        <button class="btn-green" onclick="shareOnWhatsApp()">WhatsApp</button>
-    </div>
-
-    <div class="schedule-form">
-        <h3>Schedule Post</h3>
-        <form method="POST" action="{% url 'schedule_post' %}">
-            {% csrf_token %}
-            <input type="hidden" name="image_url" value="{{ image_url }}">
-            <input type="hidden" name="caption" value="{{ caption }}">
-            <input type="hidden" name="hashtags" value="{{ hashtags }}">
+    <div class="container">
+        <div class="card animated">
+            <h1>Your Post is Ready!</h1>
             
-            <label for="schedule_time">Select Date & Time:</label><br>
-            <input type="datetime-local" id="schedule_time" name="schedule_time" required><br><br>
-            <button type="submit" class="btn-green">Schedule Post</button>
-        </form>
+            <div class="post-preview">
+                <div class="post-image-container animated delay-1">
+                    <img id="finalImage" src="{{ image_url }}" alt="{{ product_name }}" class="post-image">
+                </div>
+                
+                <div class="post-content animated delay-2">
+                    <div class="content-section">
+                        <h3><i class="fas fa-tag"></i> Product Name</h3>
+                        <p>{{ product_name }}</p>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3><i class="fas fa-comment"></i> Caption</h3>
+                        <p>{{ caption }}</p>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3><i class="fas fa-hashtag"></i> Hashtags</h3>
+                        <div class="hashtags">
+                            {% for tag in hashtags.split %}
+                                <span class="hashtag">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons animated delay-3">
+                <button class="btn btn-gray" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print/Save
+                </button>
+                <button class="btn btn-success" onclick="downloadImage()">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+        
+        <div class="card animated delay-3">
+            <h2>Share Your Post</h2>
+            <p>Spread the word by sharing your post on social media platforms:</p>
+            
+            <div class="social-buttons">
+                <button class="btn btn-primary social-btn" onclick="shareOnFacebook()">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </button>
+                <button class="btn btn-primary social-btn" onclick="shareOnTwitter()">
+                    <i class="fab fa-twitter"></i> Twitter
+                </button>
+                <button class="btn btn-primary social-btn" onclick="shareOnLinkedIn()">
+                    <i class="fab fa-linkedin-in"></i> LinkedIn
+                </button>
+                <button class="btn btn-success social-btn" onclick="shareOnWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="btn btn-danger social-btn" onclick="shareOnInstagram()">
+                    <i class="fab fa-instagram"></i> Instagram
+                </button>
+                <button class="btn btn-light social-btn" onclick="copyToClipboard()">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+            </div>
+        </div>
+        
+        <div class="card animated delay-4">
+            <h2>Schedule Your Post</h2>
+            <p>Set a future date and time to automatically publish your post:</p>
+            
+            <div class="schedule-form">
+                <form method="POST" action="{% url 'schedule_post' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="image_url" value="{{ image_url }}">
+                    <input type="hidden" name="caption" value="{{ caption }}">
+                    <input type="hidden" name="hashtags" value="{{ hashtags }}">
+                    
+                    <div class="form-group">
+                        <label for="schedule_time"><i class="far fa-calendar-alt"></i> Select Date & Time</label>
+                        <input type="datetime-local" id="schedule_time" name="schedule_time" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">
+                        <i class="far fa-clock"></i> Schedule Post
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
+        // Download image function
         function downloadImage() {
             const link = document.createElement('a');
-            link.download = 'final_post.png';
+            link.download = 'social_post_' + Date.now() + '.png';
             link.href = document.getElementById('finalImage').src;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+            
+            // Show temporary feedback
+            const btn = event.target.closest('button');
+            if (btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }
         }
-
+        
+        // Social sharing functions
         function shareOnFacebook() {
             const url = encodeURIComponent(window.location.href);
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
         }
-
+        
         function shareOnTwitter() {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent(`{{ caption }} {{ hashtags }}`);
+            const text = encodeURIComponent(`{{ product_name }} - {{ caption }} {{ hashtags }}`);
             window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, "_blank");
         }
-
+        
         function shareOnLinkedIn() {
             const url = encodeURIComponent(window.location.href);
             window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, "_blank");
         }
-
+        
         function shareOnWhatsApp() {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent(`{{ caption }} {{ hashtags }}`);
-            window.open(`https://api.whatsapp.com/send?text=${text} ${url}`, "_blank");
+            const text = encodeURIComponent(`Check this out: {{ product_name }} - {{ caption }} {{ hashtags }}`);
+            window.open(`https://api.whatsapp.com/send?text=${text}%0A%0A${url}`, "_blank");
         }
-
-        // Debugging: Log values to console
-        console.log("Image URL:", "{{ image_url }}");
-        console.log("Caption:", "{{ caption }}");
-        console.log("Hashtags:", "{{ hashtags }}");
+        
+        function shareOnInstagram() {
+            alert('To share on Instagram, please download the image first and then upload it directly to Instagram.');
+        }
+        
+        function copyToClipboard() {
+            const postText = `{{ product_name }}\n\n{{ caption }}\n\n{{ hashtags }}\n\n{{ image_url }}`;
+            navigator.clipboard.writeText(postText).then(() => {
+                // Show feedback
+                const btn = document.createElement('div');
+                btn.style.position = 'fixed';
+                btn.style.bottom = '20px';
+                btn.style.right = '20px';
+                btn.style.backgroundColor = '#4CAF50';
+                btn.style.color = 'white';
+                btn.style.padding = '12px 24px';
+                btn.style.borderRadius = '4px';
+                btn.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                btn.style.zIndex = '1000';
+                btn.textContent = 'Copied to clipboard!';
+                document.body.appendChild(btn);
+                
+                setTimeout(() => {
+                    btn.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(btn);
+                    }, 300);
+                }, 2000);
+            });
+        }
+        
+        // Set minimum datetime to current time
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const timezoneOffset = now.getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(now - timezoneOffset)).toISOString().slice(0, 16);
+            document.getElementById('schedule_time').min = localISOTime;
+        });
     </script>
-
 </body>
 </html>

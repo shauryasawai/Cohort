@@ -3,180 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Post Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Hotel Social Media Post Generator</title>
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* General Styles */
+        :root {
+            --primary: #FF4F70;
+            --primary-light: #FF6B81;
+            --secondary: #4A90E2;
+            --accent: #FF9A9E;
+            --light-bg: #FFF5F6;
+            --dark-text: #2D3748;
+            --light-text: #718096;
+            --border-radius: 16px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* General Styling */
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
-            color: #333;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(135deg, #FFF5F6, #FFEEF2);
+            color: var(--dark-text);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            margin: 0;
         }
 
+        /* Container */
         .container {
-            max-width: 500px;
+            max-width: 900px;
+            width: 100%;
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
         }
 
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        /* Header */
         h2 {
-            color: #ff4f70;
+            color: var(--primary);
             font-size: 28px;
-            margin-bottom: 25px;
-            font-weight: 600;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Form Elements */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Input Groups */
+        .input-group {
+            position: relative;
+            margin-bottom: 5px;
         }
 
         label {
             font-weight: 500;
             display: block;
-            margin-top: 15px;
-            font-size: 16px;
-            color: #555;
-            text-align: left;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: var(--dark-text);
+            transition: var(--transition);
         }
 
-        input, textarea {
+        label i {
+            margin-right: 8px;
+            color: var(--primary);
+            width: 20px;
+            text-align: center;
+        }
+
+        input, textarea, select {
             width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            border: 2px solid #ff6b81;
+            padding: 14px 16px;
+            border: 2px solid #E2E8F0;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
-            transition: 0.3s;
-            background: #f9f9f9;
+            background: #F8FAFC;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary-light);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 129, 0.2);
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
-        input:focus, textarea:focus {
-            border-color: #ff3366;
-            box-shadow: 0px 0px 10px rgba(255, 99, 132, 0.3);
-            background: #fff;
+        /* Checkbox Group */
+        .checkbox-group {
+            background: #F8FAFC;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid #EDF2F7;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: #aaa;
+        .checkbox-group p {
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
         }
 
+        .checkbox-group p i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .checkbox-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkbox-item:hover label {
+            color: var(--primary);
+        }
+
+        /* Custom Description Output */
+        .custom-description {
+            margin-top: 15px;
+            padding: 20px;
+            background: #F8FAFC;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .custom-description label {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Submit Button */
         button {
             width: 100%;
-            padding: 14px;
-            margin-top: 25px;
-            background: linear-gradient(90deg, #ff4f70, #ff3366);
+            padding: 16px;
+            margin-top: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 99, 132, 0.3);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         button:hover {
-            background: linear-gradient(90deg, #ff3366, #cc0044);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 99, 132, 0.4);
+            box-shadow: 0 10px 20px rgba(255, 79, 112, 0.3);
         }
 
         button:active {
             transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(255, 99, 132, 0.3);
         }
 
-        .error {
-            color: #d9534f;
-            font-weight: 500;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-left: 5px solid #ff4f70;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            color: #444;
-            text-align: left;
+        /* Hidden Fields */
+        .hidden-fields {
             display: none;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         /* Responsive Design */
         @media (max-width: 600px) {
             .container {
-                padding: 20px;
-                border-radius: 15px;
+                padding: 30px 20px;
             }
-
+            
+            .checkbox-options {
+                grid-template-columns: 1fr;
+            }
+            
             h2 {
                 font-size: 24px;
             }
-
-            input, textarea {
-                padding: 10px;
-                font-size: 14px;
-            }
-
-            button {
-                padding: 12px;
-                font-size: 16px;
-            }
         }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group, .checkbox-group, .custom-description, button {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .checkbox-group { animation-delay: 0.3s; }
+        .input-group:nth-child(4) { animation-delay: 0.4s; }
+        .input-group:nth-child(5) { animation-delay: 0.5s; }
+        .input-group:nth-child(6) { animation-delay: 0.6s; }
+        .input-group:nth-child(7) { animation-delay: 0.7s; }
+        .custom-description { animation-delay: 0.8s; }
+        button { animation-delay: 0.9s; }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>✨ Generate a Social Media Post ✨</h2>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="error">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        <form method="post" action="{% url 'generate_post' %}">
+        <h2>✨ Hotel Post Generator</h2>
+        
+        <form method="post" action="{% url 'generate_post' %}" oninput="generateDescription()">
             {% csrf_token %}
-            <label for="product_name">📌 Product Name:</label>
-            <input type="text" id="product_name" name="product_name" placeholder="Enter product name" required>
-        
-            <label for="description">📝 Product Description:</label>
-            <textarea id="description" name="description" placeholder="Enter a short description" required></textarea>
-        
-            <label for="target_audience">🎯 Target Audience:</label>
-            <input type="text" id="target_audience" name="target_audience" placeholder="E.g., students, professionals" required>
-        
-            <button type="submit">🚀 Generate Post</button>
+            
+            <!-- Hidden fields that will be submitted to Django -->
+            <div class="hidden-fields">
+                <input type="hidden" id="product_name" name="product_name" value="">
+                <input type="hidden" id="description" name="description" value="">
+                <input type="hidden" id="target_audience" name="target_audience" value="">
+            </div>
+
+            <!-- Hotel Name -->
+            <div class="input-group">
+                <label for="hotel_name"><i class="fas fa-hotel"></i> Hotel Name:</label>
+                <input type="text" id="hotel_name" name="hotel_name" required placeholder="Enter your hotel name">
+            </div>
+
+            <!-- Hotel Type -->
+            <div class="input-group">
+                <label for="hotel_type"><i class="fas fa-star"></i> Hotel Type:</label>
+                <select id="hotel_type" name="hotel_type" required>
+                    <option value="" disabled selected>Select hotel type</option>
+                    <option value="Luxury">Luxury Hotel</option>
+                    <option value="Budget">Budget Hotel</option>
+                    <option value="Resort">Resort</option>
+                    <option value="Business">Business Hotel</option>
+                </select>
+            </div>
+
+            <!-- Purpose of Post -->
+            <div class="checkbox-group">
+                <p><i class="fas fa-bullseye"></i> Post Purpose (Select all that apply):</p>
+                <div class="checkbox-options">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="festival_check" name="post_reason" value="Festival">
+                        <label for="festival_check">Festival Promotion</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="discount_check" name="post_reason" value="Discount">
+                        <label for="discount_check">Special Discount</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="location_check" name="post_reason" value="Location">
+                        <label for="location_check">New Location</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="occasion_check" name="post_reason" value="Occasion">
+                        <label for="occasion_check">Special Occasion</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Fields -->
+            <div class="input-group">
+                <label for="festival_name"><i class="fas fa-glass-cheers"></i> Festival Name:</label>
+                <input type="text" id="festival_name" name="festival_name" placeholder="E.g. Christmas, Diwali">
+            </div>
+
+            <div class="input-group">
+                <label for="festival_type"><i class="fas fa-tag"></i> Festival Type:</label>
+                <input type="text" id="festival_type" name="festival_type" placeholder="E.g. Cultural, Religious">
+            </div>
+
+            <div class="input-group">
+                <label for="discount_percentage"><i class="fas fa-percentage"></i> Discount (%):</label>
+                <input type="number" id="discount_percentage" name="discount_percentage" min="0" max="100" placeholder="Enter discount percentage">
+            </div>
+
+            <div class="input-group">
+                <label for="occasion_type"><i class="fas fa-calendar-alt"></i> Occasion Type:</label>
+                <input type="text" id="occasion_type" name="occasion_type" placeholder="E.g. Wedding, Anniversary">
+            </div>
+
+            <!-- Generated Post Preview -->
+            <div class="custom-description">
+                <label for="generatedDescription"><i class="fas fa-align-left"></i> Post Preview:</label>
+                <textarea id="generatedDescription" readonly placeholder="Your generated post will appear here"></textarea>
+                
+                <label for="generatedAudience"><i class="fas fa-users"></i> Target Audience:</label>
+                <input type="text" id="generatedAudience" readonly placeholder="Target audience will appear here">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit">
+                <i class="fas fa-rocket"></i> Generate Post
+            </button>
         </form>
     </div>
 
+    <script>
+        function generateDescription() {
+            let hotelName = document.getElementById("hotel_name").value || "[Hotel Name]";
+            let selectedReasons = Array.from(document.querySelectorAll('input[name="post_reason"]:checked'))
+                                        .map(checkbox => checkbox.value);
+            
+            // Default Description
+            let description = `Experience comfort and elegance at ${hotelName} with world-class amenities and exceptional hospitality.`;
+            let audience = "General Travelers, Business Executives";
+
+            // Additional Fields
+            let festivalName = document.getElementById("festival_name")?.value || "this festival";
+            let festivalType = document.getElementById("festival_type")?.value || "festival";
+            let discountPercentage = document.getElementById("discount_percentage")?.value || "exciting";
+            let occasionType = document.getElementById("occasion_type")?.value || "special moments";
+
+            // Dynamic Content Generation
+            if (selectedReasons.includes("Festival")) {
+                description = `Luxury hotel with festive decorations and cultural celebrations for ${festivalName}.`;
+                audience = "Families, Tourists, Event Planners";
+            }
+            if (selectedReasons.includes("Discount")) {
+                description += `Hotel special offer with ${discountPercentage}% discount.`;
+                audience += (audience ? ", " : "") + "Budget Travelers, Corporate Clients";
+            }
+            if (selectedReasons.includes("Location")) {
+                description += `New hotel location with a grand opening.`;
+                audience += (audience ? ", " : "") + "Local Residents, Travelers";
+            }
+            if (selectedReasons.includes("Occasion")) {
+                description += `Elegant hotel setup for ${occasionType} celebrations.`;
+                audience += (audience ? ", " : "") + "Couples, Families, Event Organizers";
+            }
+
+            // Update the visible preview fields
+            document.getElementById("generatedDescription").value = description;
+            document.getElementById("generatedAudience").value = audience;
+            
+            // Update hidden fields that will be submitted to Django
+            document.getElementById("product_name").value = hotelName;
+            document.getElementById("description").value = description;
+            document.getElementById("target_audience").value = audience;
+        }
+
+        // Initialize the form on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            generateDescription();
+        });
+    </script>
 </body>
 </html>
