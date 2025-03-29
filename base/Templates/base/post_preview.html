@@ -5,167 +5,422 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customize Your Social Media Post</title>
     <style>
+        /* Modern color palette */
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #38b000;
+            --danger-color: #ef233c;
+            --warning-color: #ffaa00;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* General body styling */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             text-align: center;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            color: #333;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: var(--dark-color);
+            line-height: 1.6;
         }
 
+        /* Container for centering content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Typography */
         h1 {
             font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 20px;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin: 1.5rem 0;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin: 1rem 0;
+            font-weight: 600;
         }
 
         /* Canvas styling */
         canvas {
-            border: 4px solid #2c3e50;
-            margin-bottom: 20px;
-            border-radius: 15px;
+            border: 4px solid var(--primary-color);
+            margin: 2rem auto;
+            border-radius: var(--border-radius);
             cursor: grab;
-            background: #fff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: white;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            max-width: 100%;
+        }
+
+        canvas:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
 
         /* Textarea styling */
         textarea {
             width: 80%;
             max-width: 600px;
-            padding: 12px;
+            padding: 15px;
             font-size: 16px;
-            border: 2px solid #2c3e50;
-            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
             margin: 10px 0;
-            transition: border-color 0.3s ease;
+            transition: var(--transition);
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
         }
 
         textarea:focus {
-            border-color: #28a745;
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
-        /* Button, input, and select styling */
-        button, input, select {
+        /* Button styling */
+        .btn {
             margin: 10px;
-            padding: 12px 20px;
+            padding: 12px 24px;
             font-size: 16px;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             border: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        button {
-            background-color: #28a745;
+        .btn-primary {
+            background-color: var(--primary-color);
             color: white;
         }
 
-        button:hover {
-            background-color: #218838;
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.2);
         }
 
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #2d9100;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(56, 176, 0, 0.2);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d90429;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(239, 35, 60, 0.2);
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e69500;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 170, 0, 0.2);
+        }
+
+        /* Input and select styling */
         input[type="color"] {
             padding: 5px;
             height: 40px;
             width: 60px;
-            border-radius: 8px;
-            border: 2px solid #2c3e50;
+            border-radius: var(--border-radius);
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        input[type="color"]:hover {
+            transform: scale(1.05);
         }
 
         input[type="range"] {
             width: 150px;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--secondary-color);
+        }
+
+        select {
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: var(--border-radius);
+            border: 2px solid #e9ecef;
+            background-color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        /* File input styling */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-btn {
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .file-input-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
         /* Controls container styling */
-        #controls {
+        .controls-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+            text-align: left;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .control-group {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
-        /* Green button styling */
-        .btn-green {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .btn-green:hover {
-            background-color: #218838;
+        .control-group label {
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 0.9rem;
         }
 
         /* Sticker and template container styling */
-        .element-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .elements-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--box-shadow);
         }
 
-        .element-container h3 {
-            width: 100%;
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        .element-container img {
-            width: 100px;
-            height: 100px;
+        .element-item {
             cursor: pointer;
             border: 2px solid transparent;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            overflow: hidden;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
         }
 
-        .element-container img:hover {
-            border-color: #28a745;
+        .element-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        .element-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .element-item:hover img {
             transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         /* Form styling */
-        form {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
+        .post-form {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: var(--box-shadow);
             max-width: 800px;
+            text-align: left;
         }
 
-        form label {
-            font-size: 1.2rem;
-            color: #2c3e50;
-            margin-top: 10px;
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
             display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
         }
 
-        form textarea {
-            width: 90%;
-            max-width: 600px;
+        /* Product info styling */
+        .product-info {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
         }
 
-        /* Resize handle styling */
-        .resize-handle {
-            width: 10px;
-            height: 10px;
-            background: #28a745;
-            border: 1px solid #fff;
+        .product-info strong {
+            color: var(--primary-color);
+        }
+
+        /* Tooltip styling */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            padding: 8px;
             position: absolute;
-            cursor: se-resize;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Notification toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* Responsive Design */
@@ -174,102 +429,218 @@
                 font-size: 2rem;
             }
 
-            #controls {
-                flex-direction: column;
-                align-items: center;
+            h2 {
+                font-size: 1.5rem;
             }
 
-            .element-container img {
-                width: 80px;
-                height: 80px;
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .elements-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+
+            textarea {
+                width: 90%;
             }
         }
+
+        /* Animation for elements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animated {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Delay animations for staggered effect */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <div class="container">
+        <h1 class="animated">Customize Your Social Media Post</h1>
+        <p class="animated delay-1">Design a stunning post that will engage your audience</p>
 
-    <h1>Edit Your Social Media Post</h1>
+        <!-- Canvas for drawing the post -->
+        <canvas id="canvas" width="800" height="1000" class="animated delay-2"></canvas>
 
-    <!-- Canvas for drawing the post -->
-    <canvas id="canvas" width="800" height="1000"></canvas>
+        <!-- Image generation section -->
+        <div class="controls-section animated delay-1">
+            <h2><i class="fas fa-image"></i> Image Customization</h2>
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="imagePrompt"><i class="fas fa-search"></i> Image Prompt</label>
+                    <input type="text" id="imagePrompt" placeholder="Describe the image you want..." class="tooltip" title="Example: 'luxury beach resort at sunset'">
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button onclick="regenerateImage()" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Generate New Image
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <div class="image-container">
-        <h3>🖼️</h3>        
-        <label for="imagePrompt">🔍 Enter Image Prompt:</label>
-        <input type="text" id="imagePrompt" placeholder="Enter a theme, e.g., beach resort">
-        <button onclick="regenerateImage()">🔄 Generate New Image</button>
+        <!-- Main controls section -->
+        <div class="controls-section animated delay-2">
+            <h2><i class="fas fa-sliders-h"></i> Design Controls</h2>
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="bgColor"><i class="fas fa-palette"></i> Background Color</label>
+                    <input type="color" id="bgColor" value="#ffffff">
+                </div>
+                
+                <div class="control-group">
+                    <label for="customText"><i class="fas fa-font"></i> Custom Text</label>
+                    <input type="text" id="customText" placeholder="Enter your text here...">
+                </div>
+                
+                <div class="control-group">
+                    <label for="textColor"><i class="fas fa-tint"></i> Text Color</label>
+                    <input type="color" id="textColor" value="#000000">
+                </div>
+                
+                <div class="control-group">
+                    <label for="textSize"><i class="fas fa-text-height"></i> Text Size: <span id="textSizeValue">20</span>px</label>
+                    <input type="range" id="textSize" min="10" max="100" value="20">
+                </div>
+            </div>
+            
+            <div class="controls-grid" style="margin-top: 1rem;">
+                <div class="file-input-wrapper">
+                    <button class="file-input-btn">
+                        <i class="fas fa-upload"></i> Upload Logo
+                    </button>
+                    <input type="file" id="uploadLogo" accept="image/*">
+                </div>
+                
+                <button onclick="addText()" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add Text
+                </button>
+                
+                <button onclick="removeSelected()" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Remove Selected
+                </button>
+                
+                <button onclick="undo()" class="btn btn-warning">
+                    <i class="fas fa-undo"></i> Undo
+                </button>
+            </div>
+        </div>
+
+        <!-- Stickers section -->
+        <div class="elements-section animated delay-3">
+            <h2><i class="fas fa-sticky-note"></i> Stickers & Elements</h2>
+            <p>Click on any sticker to add it to your design</p>
+            
+            <div class="elements-grid">
+                <div class="element-item" onclick="addSticker('https://tse2.mm.bing.net/th?id=OIP._pVAZOev9ogoZZv4vnZpNwHaHa&pid=Api&P=0&h=180')">
+                    <img src="https://tse2.mm.bing.net/th?id=OIP._pVAZOev9ogoZZv4vnZpNwHaHa&pid=Api&P=0&h=180" alt="Star Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://tse2.mm.bing.net/th?id=OIP.zVGrIvlvG4E6CU5NoAJ0_wHaHa&pid=Api&P=0&h=180')">
+                    <img src="https://tse2.mm.bing.net/th?id=OIP.zVGrIvlvG4E6CU5NoAJ0_wHaHa&pid=Api&P=0&h=180" alt="Heart Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://cdn4.iconfinder.com/data/icons/eid-al-adha-sticker/512/Eid_al_Adha-1024.png')">
+                    <img src="https://cdn4.iconfinder.com/data/icons/eid-al-adha-sticker/512/Eid_al_Adha-1024.png" alt="Celebration Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://png.pngtree.com/png-vector/20210225/ourlarge/pngtree-good-friday-sticker-effect-png-image_2954971.png')">
+                    <img src="https://png.pngtree.com/png-vector/20210225/ourlarge/pngtree-good-friday-sticker-effect-png-image_2954971.png" alt="Holiday Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://png.pngtree.com/png-vector/20210316/ourmid/pngtree-good-friday-in-sticker-style-text-with-cross-png-image_3061898.png')">
+                    <img src="https://png.pngtree.com/png-vector/20210316/ourmid/pngtree-good-friday-in-sticker-style-text-with-cross-png-image_3061898.png" alt="Religious Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://ih1.redbubble.net/image.995690532.2605/st,small,507x507-pad,600x600,f8f8f8.jpg')">
+                    <img src="https://ih1.redbubble.net/image.995690532.2605/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="Checkmark Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://tse3.mm.bing.net/th?id=OIP.ULe9ofA8rsdCAaXpeYtl2wHaHa&pid=Api&P=0&h=180')">
+                    <img src="https://tse3.mm.bing.net/th?id=OIP.ULe9ofA8rsdCAaXpeYtl2wHaHa&pid=Api&P=0&h=180" alt="Star Sticker">
+                </div>
+                <div class="element-item" onclick="addSticker('https://www.freepnglogos.com/uploads/holi-png/holi-color-png-holi-color-png-image-download-23.png')">
+                    <img src="https://www.freepnglogos.com/uploads/holi-png/holi-color-png-holi-color-png-image-download-23.png" alt="Festival Sticker">
+                </div>
+            </div>
+            
+            <div style="margin-top: 1.5rem;">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Add Your Own Sticker</h3>
+                <div class="controls-grid">
+                    <div class="file-input-wrapper" style="flex-grow: 1;">
+                        <button class="file-input-btn">
+                            <i class="fas fa-image"></i> Choose Sticker Image
+                        </button>
+                        <input type="file" id="uploadSticker" accept="image/*">
+                    </div>
+                    <button onclick="addCustomSticker()" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Add Custom Sticker
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters section -->
+        <div class="controls-section animated delay-4">
+            <h2><i class="fas fa-magic"></i> Image Filters</h2>
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="filter"><i class="fas fa-filter"></i> Apply Filter</label>
+                    <select id="filter" onchange="applyFilter(this.value)">
+                        <option value="none">No Filter</option>
+                        <option value="grayscale">Grayscale</option>
+                        <option value="sepia">Sepia</option>
+                        <option value="invert">Invert Colors</option>
+                        <option value="saturate">Saturate</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final form section -->
+        <form method="POST" action="{% url 'finalize_post' %}" class="post-form animated delay-5">
+            {% csrf_token %}
+            
+            <input type="hidden" name="product_name" value="{{ product_name }}">
+            <input type="hidden" id="finalImage" name="image_url" value="{{ image_url }}">
+            
+            <div class="product-info">
+                <p><strong><i class="fas fa-tag"></i> Product:</strong> {{ product_name }}</p>
+            </div>
+
+            <div class="form-group">
+                <label for="edited_caption"><i class="fas fa-comment"></i> Post Caption</label>
+                <textarea name="edited_caption" rows="4" placeholder="Write an engaging caption for your post...">{{ caption }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edited_hashtags"><i class="fas fa-hashtag"></i> Hashtags</label>
+                <textarea name="edited_hashtags" rows="2" placeholder="Add relevant hashtags to increase reach...">{{ hashtags }}</textarea>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="button" onclick="saveAndSubmit()" class="btn btn-success" style="padding: 15px 30px; font-size: 18px;">
+                    <i class="fas fa-check-circle"></i> Finalize & Post
+                </button>
+            </div>
+        </form>
     </div>
 
-    <!-- Controls for customizing the post -->
-    <div id="controls">
-        <input type="file" id="uploadLogo" accept="image/*">
-        <input type="color" id="bgColor" value="#ffffff">
-        <input type="text" id="customText" placeholder="Enter text">
-        <button class="btn-green" onclick="addText()">Add Text</button>
-        <label for="textColor">Text Color:</label>
-        <input type="color" id="textColor" value="#000000">
-        <label for="textSize">Text Size:</label>
-        <input type="range" id="textSize" min="10" max="100" value="20">
-        <button class="btn-green" onclick="removeSelected()">Remove Selected</button>
-        <button class="btn-green" onclick="undo()">Undo</button>
-    </div>
-
-    <!-- Stickers -->
-    <div class="element-container">
-        <h3>Stickers</h3>
-        <img src="../../stickers/eid1.png" alt="Star Sticker" onclick="addSticker('../../stickers/eid1.png')">
-        <img src="../../stickers/eid2.png" alt="Heart Sticker" onclick="addSticker('../../stickers/eid2.png')">
-        <img src="../../stickers/eid3.png" alt="Fire Sticker" onclick="addSticker('../../stickers/eid3.png')">
-        <img src="../../stickers/eid4.png" alt="Like Sticker" onclick="addSticker('../../stickers/eid4.png')">
-        <img src="../../stickers/friday1.png" alt="Fire Sticker" onclick="addSticker('../../stickers/friday1.png')">
-        <img src="../../stickers/friday2.png" alt="Smile Sticker" onclick="addSticker('../../stickers/friday2.png')">
-        <img src="../../stickers/friday3.png" alt="Check Sticker" onclick="addSticker('../../stickers/friday3.png')">
-        <img src="../../stickers/holi1.png" alt="Star Sticker" onclick="addSticker('../../stickers/holi1.png')">
-        <img src="../../stickers/holi2.png" alt="Heart Sticker" onclick="addSticker('../../stickers/holi2.png')">
-        <img src="../../stickers/holi3.png" alt="Like Sticker" onclick="addSticker('../../stickers/holi3.png')">
-    </div>
-
-    <!-- Upload Custom Sticker -->
-    <div id="controls">
-        <input type="file" id="uploadSticker" accept="image/*">
-        <button class="btn-green" onclick="addCustomSticker()">Add Custom Sticker</button>
-    </div>
-
-    <!-- Color Filters -->
-    <div id="controls">
-        <label for="filter">Apply Filter:</label>
-        <select id="filter" onchange="applyFilter(this.value)">
-            <option value="none">None</option>
-            <option value="grayscale">Grayscale</option>
-            <option value="sepia">Sepia</option>
-            <option value="invert">Invert</option>
-            <option value="saturate">Saturate</option>
-        </select>
-    </div>
-
-    <!-- Form for finalizing the post -->
-    <form method="POST" action="{% url 'finalize_post' %}">
-        {% csrf_token %}
-        
-        <input type="hidden" name="product_name" value="{{ product_name }}">
-        <input type="hidden" id="finalImage" name="image_url" value="{{ image_url }}">
-        
-        <p><strong>Product Name:</strong> {{ product_name }}</p>
-
-        <label for="edited_caption"><strong>Edit Caption:</strong></label><br>
-        <textarea name="edited_caption" rows="4">{{ caption }}</textarea><br><br>
-
-        <label for="edited_hashtags"><strong>Edit Hashtags:</strong></label><br>
-        <textarea name="edited_hashtags" rows="2">{{ hashtags }}</textarea><br><br>
-
-        <button class="btn-green" type="button" onclick="saveAndSubmit()">Finalize Post</button>
-    </form>
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
 
     <script>
         // Canvas and context setup
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         const finalImageInput = document.getElementById("finalImage");
+        const textSizeValue = document.getElementById("textSizeValue");
 
         // Array to hold all elements on the canvas
         let elements = [];
@@ -279,35 +650,60 @@
 
         // History for undo functionality
         let history = [];
-        const MAX_HISTORY_LENGTH = 20; // Limit history to 20 states
+        const MAX_HISTORY_LENGTH = 20;
+
+        // Update text size value display
+        document.getElementById("textSize").addEventListener("input", function() {
+            textSizeValue.textContent = this.value;
+        });
 
         // Load AI-generated image
         const imageUrl = "{{ image_url }}";
         const img = new Image();
-        img.crossOrigin = "Anonymous"; // Important for saving canvas with external images
+        img.crossOrigin = "Anonymous";
         img.src = imageUrl;
         img.onload = () => {
-            elements.push({ type: "image", img: img, x: 0, y: 0, width: canvas.width, height: canvas.height });
-            saveState(); // Save initial state
+            elements.push({ 
+                type: "image", 
+                img: img, 
+                x: 0, 
+                y: 0, 
+                width: canvas.width, 
+                height: canvas.height 
+            });
+            saveState();
             drawCanvas();
+            showToast("Design canvas ready! Start customizing your post.");
         };
+
+        // Function to show toast notification
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
 
         // Function to save the current state to history
         function saveState() {
             if (history.length >= MAX_HISTORY_LENGTH) {
-                history.shift(); // Remove the oldest state if history exceeds limit
+                history.shift();
             }
-            history.push(JSON.stringify(elements)); // Save a deep copy of the elements array
+            history.push(JSON.stringify(elements));
         }
 
         // Function to undo the last change
         function undo() {
             if (history.length > 1) {
-                history.pop(); // Remove the current state
-                elements = JSON.parse(history[history.length - 1]); // Revert to the previous state
+                history.pop();
+                elements = JSON.parse(history[history.length - 1]);
                 drawCanvas();
+                showToast("Undo successful");
             } else {
-                alert("No more states to undo.");
+                showToast("Nothing more to undo");
             }
         }
 
@@ -327,18 +723,26 @@
                 }
             });
 
-            // Draw resize handle if an image is selected
+            // Draw selection outline and resize handle
             if (selectedElement && selectedElement.type === "image") {
-                ctx.strokeStyle = "#28a745";
+                ctx.strokeStyle = var(--primary-color);
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
                 ctx.strokeRect(selectedElement.x, selectedElement.y, selectedElement.width, selectedElement.height);
+                ctx.setLineDash([]);
                 drawResizeHandle(selectedElement.x + selectedElement.width, selectedElement.y + selectedElement.height);
             }
         }
 
         // Draw resize handle
         function drawResizeHandle(x, y) {
-            ctx.fillStyle = "#28a745";
-            ctx.fillRect(x - 5, y - 5, 10, 10);
+            ctx.fillStyle = var(--primary-color);
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            ctx.stroke();
         }
 
         // Change Background Color
@@ -354,13 +758,25 @@
             const size = document.getElementById("textSize").value;
             
             if (text.trim() === "") {
-                alert("Please enter some text first");
+                showToast("Please enter some text first");
                 return;
             }
             
-            elements.push({ type: "text", text, x: 50, y: 50, font: `bold ${size}px Arial`, color, size });
+            elements.push({ 
+                type: "text", 
+                text, 
+                x: 50, 
+                y: 50, 
+                font: `bold ${size}px Arial`, 
+                color, 
+                size 
+            });
             saveState();
             drawCanvas();
+            showToast("Text added to canvas");
+            
+            // Clear the input field
+            document.getElementById("customText").value = "";
         }
 
         // Upload Logo
@@ -373,9 +789,17 @@
                 const logoImg = new Image();
                 logoImg.src = e.target.result;
                 logoImg.onload = function () {
-                    elements.push({ type: "image", img: logoImg, x: 100, y: 100, width: 100, height: 100 });
+                    elements.push({ 
+                        type: "image", 
+                        img: logoImg, 
+                        x: 100, 
+                        y: 100, 
+                        width: 100, 
+                        height: 100 
+                    });
                     saveState();
                     drawCanvas();
+                    showToast("Logo uploaded successfully");
                 };
             };
             reader.readAsDataURL(file);
@@ -384,17 +808,16 @@
         // Add Sticker from URL
         function addSticker(stickerUrl) {
             const stickerImg = new Image();
-            stickerImg.crossOrigin = "Anonymous"; // Important for saving canvas with external images
+            stickerImg.crossOrigin = "Anonymous";
             stickerImg.src = stickerUrl;
             stickerImg.onload = function () {
-                // Calculate aspect ratio to maintain proportions
                 const aspectRatio = stickerImg.width / stickerImg.height;
                 const defaultSize = 100;
                 
                 elements.push({
                     type: "image",
                     img: stickerImg,
-                    x: canvas.width / 2 - defaultSize / 2, // Center the sticker
+                    x: canvas.width / 2 - defaultSize / 2,
                     y: canvas.height / 2 - defaultSize / 2,
                     width: defaultSize,
                     height: defaultSize / aspectRatio,
@@ -403,10 +826,11 @@
                 });
                 saveState();
                 drawCanvas();
+                showToast("Sticker added to canvas");
             };
             stickerImg.onerror = function () {
                 console.error("Failed to load sticker:", stickerUrl);
-                alert("Failed to load sticker. Please try another one.");
+                showToast("Failed to load sticker. Please try another one.");
             };
         }
 
@@ -415,7 +839,7 @@
             const fileInput = document.getElementById("uploadSticker");
             const file = fileInput.files[0];
             if (!file) {
-                alert("Please select a sticker image first");
+                showToast("Please select a sticker image first");
                 return;
             }
             
@@ -424,14 +848,13 @@
                 const stickerImg = new Image();
                 stickerImg.src = e.target.result;
                 stickerImg.onload = function () {
-                    // Calculate aspect ratio to maintain proportions
                     const aspectRatio = stickerImg.width / stickerImg.height;
                     const defaultSize = 100;
                     
                     elements.push({
                         type: "image",
                         img: stickerImg,
-                        x: canvas.width / 2 - defaultSize / 2, // Center the sticker
+                        x: canvas.width / 2 - defaultSize / 2,
                         y: canvas.height / 2 - defaultSize / 2,
                         width: defaultSize,
                         height: defaultSize / aspectRatio,
@@ -440,7 +863,8 @@
                     });
                     saveState();
                     drawCanvas();
-                    fileInput.value = ""; // Clear the file input
+                    fileInput.value = "";
+                    showToast("Custom sticker added successfully");
                 };
             };
             reader.readAsDataURL(file);
@@ -451,6 +875,7 @@
             ctx.filter = filter === "none" ? "none" : filter + "(100%)";
             saveState();
             drawCanvas();
+            showToast(`Filter applied: ${filter}`);
         }
 
         // Handle Dragging and Resizing
@@ -463,7 +888,8 @@
             if (selectedElement && selectedElement.type === "image") {
                 const handleX = selectedElement.x + selectedElement.width;
                 const handleY = selectedElement.y + selectedElement.height;
-                if (mouseX >= handleX - 10 && mouseX <= handleX + 10 && mouseY >= handleY - 10 && mouseY <= handleY + 10) {
+                if (mouseX >= handleX - 10 && mouseX <= handleX + 10 && 
+                    mouseY >= handleY - 10 && mouseY <= handleY + 10) {
                     resizing = true;
                     return;
                 }
@@ -474,12 +900,8 @@
                 const element = elements[i];
 
                 if (element.type === "image") {
-                    if (
-                        mouseX >= element.x &&
-                        mouseX <= element.x + element.width &&
-                        mouseY >= element.y &&
-                        mouseY <= element.y + element.height
-                    ) {
+                    if (mouseX >= element.x && mouseX <= element.x + element.width &&
+                        mouseY >= element.y && mouseY <= element.y + element.height) {
                         selectedElement = element;
                         offsetX = mouseX - element.x;
                         offsetY = mouseY - element.y;
@@ -488,12 +910,8 @@
                     }
                 } else if (element.type === "text") {
                     const textWidth = ctx.measureText(element.text).width;
-                    if (
-                        mouseX >= element.x &&
-                        mouseX <= element.x + textWidth &&
-                        mouseY >= element.y - element.size &&
-                        mouseY <= element.y
-                    ) {
+                    if (mouseX >= element.x && mouseX <= element.x + textWidth &&
+                        mouseY >= element.y - element.size && mouseY <= element.y) {
                         selectedElement = element;
                         offsetX = mouseX - element.x;
                         offsetY = mouseY - element.y;
@@ -502,6 +920,10 @@
                     }
                 }
             }
+            
+            // If clicked on empty space, deselect
+            selectedElement = null;
+            drawCanvas();
         });
 
         canvas.addEventListener("mousemove", function (e) {
@@ -522,7 +944,7 @@
 
         canvas.addEventListener("mouseup", function () {
             if (dragging || resizing) {
-                saveState(); // Save state after dragging or resizing
+                saveState();
             }
             dragging = false;
             resizing = false;
@@ -535,6 +957,9 @@
                 selectedElement = null;
                 saveState();
                 drawCanvas();
+                showToast("Element removed");
+            } else {
+                showToast("No element selected to remove");
             }
         }
 
@@ -565,6 +990,7 @@
             finalImageInput.value = dataURL;
             // Submit the form
             document.querySelector("form").submit();
+            showToast("Post submitted successfully!");
         }
 
         function getCSRFToken() {
@@ -573,13 +999,15 @@
 
         function regenerateImage() {
             let prompt = document.getElementById("imagePrompt").value || "luxury hotel";
+            
+            showToast("Generating new image... Please wait");
         
             fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}`)
                 .then(response => response.json())
                 .then(data => {
                     let img = new Image();
-                    img.crossOrigin = "Anonymous"; // Prevents CORS issues
-                    img.src = data.image_url + `?t=${new Date().getTime()}`; // Force image reload
+                    img.crossOrigin = "Anonymous";
+                    img.src = data.image_url + `?t=${new Date().getTime()}`;
         
                     img.onload = function () {
                         // Clear existing elements and add the new image
@@ -588,20 +1016,19 @@
                         // Save state and redraw canvas
                         saveState();
                         drawCanvas();
+                        showToast("New image generated successfully!");
                     };
         
                     img.onerror = function () {
                         console.error("Error loading image");
-                        alert("Failed to regenerate the image. Please try again.");
+                        showToast("Failed to regenerate the image. Please try again.");
                     };
                 })
                 .catch(error => {
                     console.error("Error fetching image:", error);
-                    alert("Error generating image. Please check your connection and try again.");
+                    showToast("Error generating image. Please check your connection.");
                 });
         }
-        
     </script>
-
 </body>
 </html>
