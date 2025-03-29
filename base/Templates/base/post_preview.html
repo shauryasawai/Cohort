@@ -640,7 +640,6 @@
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         const finalImageInput = document.getElementById("finalImage");
-        const textSizeValue = document.getElementById("textSizeValue");
 
         // Array to hold all elements on the canvas
         let elements = [];
@@ -650,60 +649,35 @@
 
         // History for undo functionality
         let history = [];
-        const MAX_HISTORY_LENGTH = 20;
-
-        // Update text size value display
-        document.getElementById("textSize").addEventListener("input", function() {
-            textSizeValue.textContent = this.value;
-        });
+        const MAX_HISTORY_LENGTH = 20; // Limit history to 20 states
 
         // Load AI-generated image
         const imageUrl = "{{ image_url }}";
         const img = new Image();
-        img.crossOrigin = "Anonymous";
+        img.crossOrigin = "Anonymous"; // Important for saving canvas with external images
         img.src = imageUrl;
         img.onload = () => {
-            elements.push({ 
-                type: "image", 
-                img: img, 
-                x: 0, 
-                y: 0, 
-                width: canvas.width, 
-                height: canvas.height 
-            });
-            saveState();
+            elements.push({ type: "image", img: img, x: 0, y: 0, width: canvas.width, height: canvas.height });
+            saveState(); // Save initial state
             drawCanvas();
-            showToast("Design canvas ready! Start customizing your post.");
         };
-
-        // Function to show toast notification
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.classList.add("show");
-            
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
-        }
 
         // Function to save the current state to history
         function saveState() {
             if (history.length >= MAX_HISTORY_LENGTH) {
-                history.shift();
+                history.shift(); // Remove the oldest state if history exceeds limit
             }
-            history.push(JSON.stringify(elements));
+            history.push(JSON.stringify(elements)); // Save a deep copy of the elements array
         }
 
         // Function to undo the last change
         function undo() {
             if (history.length > 1) {
-                history.pop();
-                elements = JSON.parse(history[history.length - 1]);
+                history.pop(); // Remove the current state
+                elements = JSON.parse(history[history.length - 1]); // Revert to the previous state
                 drawCanvas();
-                showToast("Undo successful");
             } else {
-                showToast("Nothing more to undo");
+                alert("No more states to undo.");
             }
         }
 
@@ -723,26 +697,18 @@
                 }
             });
 
-            // Draw selection outline and resize handle
+            // Draw resize handle if an image is selected
             if (selectedElement && selectedElement.type === "image") {
-                ctx.strokeStyle = var(--primary-color);
-                ctx.lineWidth = 2;
-                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = "#28a745";
                 ctx.strokeRect(selectedElement.x, selectedElement.y, selectedElement.width, selectedElement.height);
-                ctx.setLineDash([]);
                 drawResizeHandle(selectedElement.x + selectedElement.width, selectedElement.y + selectedElement.height);
             }
         }
 
         // Draw resize handle
         function drawResizeHandle(x, y) {
-            ctx.fillStyle = var(--primary-color);
-            ctx.beginPath();
-            ctx.arc(x, y, 6, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.fillStyle = "#28a745";
+            ctx.fillRect(x - 5, y - 5, 10, 10);
         }
 
         // Change Background Color
@@ -758,25 +724,13 @@
             const size = document.getElementById("textSize").value;
             
             if (text.trim() === "") {
-                showToast("Please enter some text first");
+                alert("Please enter some text first");
                 return;
             }
             
-            elements.push({ 
-                type: "text", 
-                text, 
-                x: 50, 
-                y: 50, 
-                font: `bold ${size}px Arial`, 
-                color, 
-                size 
-            });
+            elements.push({ type: "text", text, x: 50, y: 50, font: `bold ${size}px Arial`, color, size });
             saveState();
             drawCanvas();
-            showToast("Text added to canvas");
-            
-            // Clear the input field
-            document.getElementById("customText").value = "";
         }
 
         // Upload Logo
@@ -789,17 +743,9 @@
                 const logoImg = new Image();
                 logoImg.src = e.target.result;
                 logoImg.onload = function () {
-                    elements.push({ 
-                        type: "image", 
-                        img: logoImg, 
-                        x: 100, 
-                        y: 100, 
-                        width: 100, 
-                        height: 100 
-                    });
+                    elements.push({ type: "image", img: logoImg, x: 100, y: 100, width: 100, height: 100 });
                     saveState();
                     drawCanvas();
-                    showToast("Logo uploaded successfully");
                 };
             };
             reader.readAsDataURL(file);
@@ -808,16 +754,17 @@
         // Add Sticker from URL
         function addSticker(stickerUrl) {
             const stickerImg = new Image();
-            stickerImg.crossOrigin = "Anonymous";
+            stickerImg.crossOrigin = "Anonymous"; // Important for saving canvas with external images
             stickerImg.src = stickerUrl;
             stickerImg.onload = function () {
+                // Calculate aspect ratio to maintain proportions
                 const aspectRatio = stickerImg.width / stickerImg.height;
                 const defaultSize = 100;
                 
                 elements.push({
                     type: "image",
                     img: stickerImg,
-                    x: canvas.width / 2 - defaultSize / 2,
+                    x: canvas.width / 2 - defaultSize / 2, // Center the sticker
                     y: canvas.height / 2 - defaultSize / 2,
                     width: defaultSize,
                     height: defaultSize / aspectRatio,
@@ -826,11 +773,10 @@
                 });
                 saveState();
                 drawCanvas();
-                showToast("Sticker added to canvas");
             };
             stickerImg.onerror = function () {
                 console.error("Failed to load sticker:", stickerUrl);
-                showToast("Failed to load sticker. Please try another one.");
+                alert("Failed to load sticker. Please try another one.");
             };
         }
 
@@ -839,7 +785,7 @@
             const fileInput = document.getElementById("uploadSticker");
             const file = fileInput.files[0];
             if (!file) {
-                showToast("Please select a sticker image first");
+                alert("Please select a sticker image first");
                 return;
             }
             
@@ -848,13 +794,14 @@
                 const stickerImg = new Image();
                 stickerImg.src = e.target.result;
                 stickerImg.onload = function () {
+                    // Calculate aspect ratio to maintain proportions
                     const aspectRatio = stickerImg.width / stickerImg.height;
                     const defaultSize = 100;
                     
                     elements.push({
                         type: "image",
                         img: stickerImg,
-                        x: canvas.width / 2 - defaultSize / 2,
+                        x: canvas.width / 2 - defaultSize / 2, // Center the sticker
                         y: canvas.height / 2 - defaultSize / 2,
                         width: defaultSize,
                         height: defaultSize / aspectRatio,
@@ -863,8 +810,7 @@
                     });
                     saveState();
                     drawCanvas();
-                    fileInput.value = "";
-                    showToast("Custom sticker added successfully");
+                    fileInput.value = ""; // Clear the file input
                 };
             };
             reader.readAsDataURL(file);
@@ -875,7 +821,6 @@
             ctx.filter = filter === "none" ? "none" : filter + "(100%)";
             saveState();
             drawCanvas();
-            showToast(`Filter applied: ${filter}`);
         }
 
         // Handle Dragging and Resizing
@@ -888,8 +833,7 @@
             if (selectedElement && selectedElement.type === "image") {
                 const handleX = selectedElement.x + selectedElement.width;
                 const handleY = selectedElement.y + selectedElement.height;
-                if (mouseX >= handleX - 10 && mouseX <= handleX + 10 && 
-                    mouseY >= handleY - 10 && mouseY <= handleY + 10) {
+                if (mouseX >= handleX - 10 && mouseX <= handleX + 10 && mouseY >= handleY - 10 && mouseY <= handleY + 10) {
                     resizing = true;
                     return;
                 }
@@ -900,8 +844,12 @@
                 const element = elements[i];
 
                 if (element.type === "image") {
-                    if (mouseX >= element.x && mouseX <= element.x + element.width &&
-                        mouseY >= element.y && mouseY <= element.y + element.height) {
+                    if (
+                        mouseX >= element.x &&
+                        mouseX <= element.x + element.width &&
+                        mouseY >= element.y &&
+                        mouseY <= element.y + element.height
+                    ) {
                         selectedElement = element;
                         offsetX = mouseX - element.x;
                         offsetY = mouseY - element.y;
@@ -910,8 +858,12 @@
                     }
                 } else if (element.type === "text") {
                     const textWidth = ctx.measureText(element.text).width;
-                    if (mouseX >= element.x && mouseX <= element.x + textWidth &&
-                        mouseY >= element.y - element.size && mouseY <= element.y) {
+                    if (
+                        mouseX >= element.x &&
+                        mouseX <= element.x + textWidth &&
+                        mouseY >= element.y - element.size &&
+                        mouseY <= element.y
+                    ) {
                         selectedElement = element;
                         offsetX = mouseX - element.x;
                         offsetY = mouseY - element.y;
@@ -920,10 +872,6 @@
                     }
                 }
             }
-            
-            // If clicked on empty space, deselect
-            selectedElement = null;
-            drawCanvas();
         });
 
         canvas.addEventListener("mousemove", function (e) {
@@ -944,7 +892,7 @@
 
         canvas.addEventListener("mouseup", function () {
             if (dragging || resizing) {
-                saveState();
+                saveState(); // Save state after dragging or resizing
             }
             dragging = false;
             resizing = false;
@@ -957,9 +905,6 @@
                 selectedElement = null;
                 saveState();
                 drawCanvas();
-                showToast("Element removed");
-            } else {
-                showToast("No element selected to remove");
             }
         }
 
@@ -990,7 +935,6 @@
             finalImageInput.value = dataURL;
             // Submit the form
             document.querySelector("form").submit();
-            showToast("Post submitted successfully!");
         }
 
         function getCSRFToken() {
@@ -999,15 +943,13 @@
 
         function regenerateImage() {
             let prompt = document.getElementById("imagePrompt").value || "luxury hotel";
-            
-            showToast("Generating new image... Please wait");
         
             fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}`)
                 .then(response => response.json())
                 .then(data => {
                     let img = new Image();
-                    img.crossOrigin = "Anonymous";
-                    img.src = data.image_url + `?t=${new Date().getTime()}`;
+                    img.crossOrigin = "Anonymous"; // Prevents CORS issues
+                    img.src = data.image_url + `?t=${new Date().getTime()}`; // Force image reload
         
                     img.onload = function () {
                         // Clear existing elements and add the new image
@@ -1016,19 +958,20 @@
                         // Save state and redraw canvas
                         saveState();
                         drawCanvas();
-                        showToast("New image generated successfully!");
                     };
         
                     img.onerror = function () {
                         console.error("Error loading image");
-                        showToast("Failed to regenerate the image. Please try again.");
+                        alert("Failed to regenerate the image. Please try again.");
                     };
                 })
                 .catch(error => {
                     console.error("Error fetching image:", error);
-                    showToast("Error generating image. Please check your connection.");
+                    alert("Error generating image. Please check your connection and try again.");
                 });
         }
+        
     </script>
+
 </body>
 </html>
